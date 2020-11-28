@@ -37,10 +37,6 @@ namespace visioprueba
                          if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
                          {
                             result.Add(shape.Text);
-                            xOut = shape.x
-                            yOut = shape.Cells("PinY");
-                            Console.WriteLine(xOut);
-                            Console.WriteLine(shape.Text);
                          }
                          else
                          { // si es una relación
