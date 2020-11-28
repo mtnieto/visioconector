@@ -1,0 +1,36 @@
+C:\Users\olmot\source\repos\visioConector\bin\Debug\visioConector.dll
+C:\Users\olmot\source\repos\visioConector\bin\Debug\visioConector.pdb
+C:\Users\olmot\source\repos\visioConector\bin\Debug\nunit.framework.dll
+C:\Users\olmot\source\repos\visioConector\bin\Debug\VisioConectorTest.dll
+C:\Users\olmot\source\repos\visioConector\bin\Debug\VisioConectorTest.pdb
+C:\Users\olmot\source\repos\visioConector\bin\Debug\nunit.framework.pdb
+C:\Users\olmot\source\repos\visioConector\bin\Debug\nunit.framework.xml
+C:\Users\olmot\source\repos\visioConector\obj\Debug\visioConector.Test.csprojAssemblyReference.cache
+C:\Users\olmot\source\repos\visioConector\obj\Debug\visioConector.Test.csproj.CoreCompileInputs.cache
+C:\Users\olmot\source\repos\visioConector\obj\Debug\visioConector.Test.csproj.CopyComplete
+C:\Users\olmot\source\repos\visioConector\obj\Debug\visioConector.dll
+C:\Users\olmot\source\repos\visioConector\obj\Debug\visioConector.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\visioConector.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\visioConector.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\nunit.framework.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\VisioConectorTest.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\VisioConectorTest.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\nunit.framework.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\bin\Debug\nunit.framework.xml
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\obj\Debug\visioConector.Test.csprojAssemblyReference.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\obj\Debug\visioConector.Test.csproj.CoreCompileInputs.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\obj\Debug\visioConector.Test.csproj.CopyComplete
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\obj\Debug\visioConector.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\visioConector\obj\Debug\visioConector.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\visioConector.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\visioConector.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\nunit.framework.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\VisioConectorTest.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\VisioConectorTest.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\nunit.framework.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\bin\Debug\nunit.framework.xml
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.Test.csprojAssemblyReference.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.Test.csproj.CoreCompileInputs.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.Test.csproj.CopyComplete
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.pdb

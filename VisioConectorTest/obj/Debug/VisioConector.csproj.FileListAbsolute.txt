@@ -1,0 +1,18 @@
+C:\Users\olmot\source\repos\VisioConectorTest\bin\Debug\VisioConectorTest.dll
+C:\Users\olmot\source\repos\VisioConectorTest\bin\Debug\VisioConectorTest.pdb
+C:\Users\olmot\source\repos\VisioConectorTest\obj\Debug\VisioConector.csprojAssemblyReference.cache
+C:\Users\olmot\source\repos\VisioConectorTest\obj\Debug\VisioConector.csproj.CoreCompileInputs.cache
+C:\Users\olmot\source\repos\VisioConectorTest\obj\Debug\VisioConectorTest.dll
+C:\Users\olmot\source\repos\VisioConectorTest\obj\Debug\VisioConectorTest.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\VisioConectorTest\bin\Debug\VisioConectorTest.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\VisioConectorTest\bin\Debug\VisioConectorTest.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\VisioConectorTest\obj\Debug\VisioConector.csprojAssemblyReference.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\VisioConectorTest\obj\Debug\VisioConector.csproj.CoreCompileInputs.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\VisioConectorTest\obj\Debug\VisioConectorTest.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos (2)\VisioConectorTest\obj\Debug\VisioConectorTest.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\bin\Debug\VisioConectorTest.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\bin\Debug\VisioConectorTest.pdb
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConector.csprojAssemblyReference.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConector.csproj.CoreCompileInputs.cache
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConectorTest.dll
+C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConectorTest.pdb
