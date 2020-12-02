@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 using Visio = Microsoft.Office.Interop.Visio;
+using SRL.Mappings.Enginering;
+using SRL.Mappings.Enginering.PhysicalLevel;
 
 namespace visioprueba
 {
@@ -37,6 +39,7 @@ namespace visioprueba
                          if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
                          {
                             result.Add(shape.Text);
+                            Console.Write(result);
                          }
                          else
                          { // si es una relación
@@ -50,11 +53,15 @@ namespace visioprueba
                     break;
                 }
 
-                Visio.Page newpage = visioDoc.Pages.Add();
+
+
+
+                // Aqui escribe /*
+             /* Visio.Page newpage = visioDoc.Pages.Add();
                 Visio.Shape sourceShape = CreateState(newpage, "First ");
                 Visio.Shape targetShape = CreateState(newpage, "Second ");
 
-                Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape);
+                Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape); */
 
 
             }

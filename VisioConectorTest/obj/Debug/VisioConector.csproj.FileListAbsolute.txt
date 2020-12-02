@@ -16,3 +16,9 @@ C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\Vi
 C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConector.csproj.CoreCompileInputs.cache
 C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConectorTest.dll
 C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\VisioConectorTest\obj\Debug\VisioConectorTest.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\VisioConectorTest\bin\Debug\VisioConectorTest.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\VisioConectorTest\bin\Debug\VisioConectorTest.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\VisioConectorTest\obj\Debug\VisioConector.csprojAssemblyReference.cache
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\VisioConectorTest\obj\Debug\VisioConector.csproj.CoreCompileInputs.cache
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\VisioConectorTest\obj\Debug\VisioConectorTest.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\VisioConectorTest\obj\Debug\VisioConectorTest.pdb

@@ -34,3 +34,15 @@ C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioC
 C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.Test.csproj.CopyComplete
 C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.dll
 C:\Users\bruno.ibanez\Desktop\Reutilizacion\repos\visioConector\obj\Debug\visioConector.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\visioConector.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\visioConector.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\nunit.framework.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\VisioConectorTest.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\VisioConectorTest.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\nunit.framework.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\nunit.framework.xml
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.Test.csprojAssemblyReference.cache
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.Test.csproj.CoreCompileInputs.cache
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.Test.csproj.CopyComplete
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.pdb
