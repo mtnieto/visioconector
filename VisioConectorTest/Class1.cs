@@ -32,10 +32,17 @@ namespace visioprueba
                 Double xOut;
                 Double yOut;
                 foreach (Visio.Page page in visioDoc.Pages)
+
                 {
+                    PhysicalModel physicalModel = new PhysicalModel(page.Name, page.NameU, page.ID.ToString());    // añadir codigo identidficador de la pagina
                     // se recorren los objetos
                     foreach (Visio.Shape shape in page.Shapes)
                      {
+
+                        // Owner, dentro de qué elmento estoy contenido
+                        PhysicalComponent shapePC;
+                        shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
+
                          if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
                          {
                             result.Add(shape.Text);
