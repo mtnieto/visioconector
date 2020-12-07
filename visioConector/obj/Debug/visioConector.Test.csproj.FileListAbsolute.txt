@@ -46,3 +46,13 @@ C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\v
 C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.Test.csproj.CopyComplete
 C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.dll
 C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\obj\Debug\visioConector.pdb
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL.Mappings.Enginering.PhysicalLevel.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL.Mappings.Enginering.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL.Mappings.Core.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\Cake.Engine.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRLV2.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL.Mappings.Enginering.BehaviourDescription.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL.Mappings.Enginering.Structure.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL.Mappings.Enginering.Common.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRL2Cake.dll
+C:\Users\olmot\Desktop\Reutilizacion\git\visioconector\visioConector\bin\Debug\SRLUtilities.dll

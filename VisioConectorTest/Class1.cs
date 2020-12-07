@@ -13,12 +13,15 @@ namespace visioprueba
 {
     public class Processor
     {
+                 
         public static List<string> GetVisioShapesFromFile(string fipath)
         {
             // lista de las shapes
             List<string> result;
             result = new List<string>();
 
+            Dictionary<int, PhysicalComponent> allComponents = new Dictionary<int, PhysicalComponent>();
+            Dictionary<int, PhysicalComponent> allRelationShip = new Dictionary<int, PhysicalComponent>();
 
             Dictionary<int, Shape> listanodes = new Dictionary<int, Shape>();
             Dictionary<int, Shape> relaciones = new Dictionary<int, Shape>();
@@ -38,20 +41,31 @@ namespace visioprueba
                     // se recorren los objetos
                     foreach (Visio.Shape shape in page.Shapes)
                      {
-
-                        // Owner, dentro de qué elmento estoy contenido
                         PhysicalComponent shapePC;
-                        shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
 
-                         if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
+                        shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
+                        shapePC.ADD_Metadata("lastModificationDate", typeof(string), DateTime.Now); // Le podemos añadir propiedades
+
+                        if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
                          {
-                            result.Add(shape.Text);
-                            Console.Write(result);
-                         }
+                           /* result.Add(shape.Text);
+                            Console.Write(result);*/
+                          
+
+                            // Transformaciones de interoperabilidad, herramienta que genera la indezacion, INT de interoperabilidad
+                            shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
+
+
+                            shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
+                                                                 // shape.TYPE_LibararyPath_InSource = "" // por si queremos usar una librería ya existente
+                            allComponents.Add(shape.ID, shapePC);
+                        }
                          else
                          { // si es una relación
                             if (shape.Connects.Count > 0) {
+
                                 Visio.Shape from = shape.Connects.Item16[1].ToSheet;
+                                allRelationShip.Add(shape.ID, shapePC);
                             }
                              
                          }
@@ -87,6 +101,8 @@ namespace visioprueba
                     if (shape.OneD == 0 && shape.Type != (short)Visio.VisShapeTypes.visTypeForeignObject) { // info embebida
                         //se insertan los nodos en la colección
                         nodes.Add(shape.ID, shape);
+                        // Owner, dentro de qué elmento estoy contenido
+                        
                     } else if(shape.OneD == -1) {
                         relationship.Add(shape.ID, shape);
                     }
