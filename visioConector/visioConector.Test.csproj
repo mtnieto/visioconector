@@ -35,8 +35,60 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cake.ConnectionFactory">
+      <HintPath>..\SRL\Cake.ConnectionFactory.dll</HintPath>
+    </Reference>
+    <Reference Include="Cake.Engine, Version=20.1.7641.27225, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\Cake.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="Core">
+      <HintPath>..\..\..\Downloads\Core.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Core, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL.Mappings.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL.Mappings.Enginering.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering.BehaviourDescription, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL.Mappings.Enginering.BehaviourDescription.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL.Mappings.Enginering.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering.Function">
+      <HintPath>..\SRL\SRL.Mappings.Enginering.Function.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering.PhysicalLevel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL.Mappings.Enginering.PhysicalLevel.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering.Specification">
+      <HintPath>..\SRL\SRL.Mappings.Enginering.Specification.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL.Mappings.Enginering.Structure, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL.Mappings.Enginering.Structure.dll</HintPath>
+    </Reference>
+    <Reference Include="SRL2Cake, Version=20.1.7641.27259, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRL2Cake.dll</HintPath>
+    </Reference>
+    <Reference Include="SRLUtilities, Version=20.1.7641.27259, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRLUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="SRLV2, Version=20.1.7641.27212, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SRL\SRLV2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

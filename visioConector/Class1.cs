@@ -8,7 +8,7 @@ namespace visioConector
 {
     public class Class1
     {
-        private const string Fipath = @"C:\Users\olmot\Desktop\Reutilizacion\maquinaEstados.vsdx";
+        private const string Fipath = @"C:\Users\User\Desktop\visioconector\maquinaEstados.vsdx";
 
         [Test]
         public void basicTest()

@@ -8,32 +8,24 @@ using System.Xml.XPath;
 using Visio = Microsoft.Office.Interop.Visio;
 using SRL.Mappings.Enginering;
 using SRL.Mappings.Enginering.PhysicalLevel;
-
+using Cake.Engine;
 namespace visioprueba
 {
     public class Processor
     {
                  
-        public static List<string> GetVisioShapesFromFile(string fipath)
+        public static List<PhysicalModel> GetVisioShapesFromFile(string fipath)
         {
-            // lista de las shapes
-            List<string> result;
-            result = new List<string>();
 
+            List<PhysicalModel> pagesModels = new List<PhysicalModel>();
             Dictionary<int, PhysicalComponent> allComponents = new Dictionary<int, PhysicalComponent>();
-            Dictionary<int, PhysicalComponent> allRelationShip = new Dictionary<int, PhysicalComponent>();
-
-            Dictionary<int, Shape> listanodes = new Dictionary<int, Shape>();
-            Dictionary<int, Shape> relaciones = new Dictionary<int, Shape>();
+            List<Shape> relations = new List<Shape>();
             // Creamos y abrimos documento de visio
             if (System.IO.File.Exists(fipath))
             {
                 Visio.Document visioDoc = new Visio.Application().Documents.Open(fipath);
 
-                //recorremos las páginas del doc
-                List<Shape> listaNodos = new List<Shape>();
-                Double xOut;
-                Double yOut;
+       
                 foreach (Visio.Page page in visioDoc.Pages)
 
                 {
@@ -41,21 +33,17 @@ namespace visioprueba
                     // se recorren los objetos
                     foreach (Visio.Shape shape in page.Shapes)
                      {
-                        PhysicalComponent shapePC;
-
-                        shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
-                        shapePC.ADD_Metadata("lastModificationDate", typeof(string), DateTime.Now); // Le podemos añadir propiedades
+                       
 
                         if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
                          {
-                           /* result.Add(shape.Text);
-                            Console.Write(result);*/
-                          
-
+                            PhysicalComponent shapePC;
+                            shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
+                            shapePC.ADD_Metadata("lastModificationDate", typeof(string), DateTime.Now); // Le podemos añadir propiedades
+                            /* result.Add(shape.Text);
+                             Console.Write(result);*/
                             // Transformaciones de interoperabilidad, herramienta que genera la indezacion, INT de interoperabilidad
                             shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
-
-
                             shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
                                                                  // shape.TYPE_LibararyPath_InSource = "" // por si queremos usar una librería ya existente
                             allComponents.Add(shape.ID, shapePC);
@@ -63,22 +51,57 @@ namespace visioprueba
                          else
                          { // si es una relación
                             if (shape.Connects.Count > 0) {
+                               /* Console.WriteLine("Número de relaciones" + shape.Connects.Count);
+                                Visio.Shape transitionFrom = shape.Connects.Item16[1].ToSheet;
+                                Visio.Shape transitionTo = shape.Connects.Item16[2].ToSheet;
+                                shapePC.ADD_Metadata("from", typeof(int), transitionFrom.ID);
+                               
 
-                                Visio.Shape from = shape.Connects.Item16[1].ToSheet;
-                                allRelationShip.Add(shape.ID, shapePC);
+                                shapePC.ADD_Metadata("to", typeof(int), transitionTo.ID);
+                                Dictionary<string, Type> aux = shapePC.GET_Metadata();*/
+                             
+                                //shapePC.ADD_Metadata("from", typeof(int), DateTime.Now); // Le podemos añadir propiedades
+
+                                relations.Add(shape);
                             }
                              
                          }
                      }
-                    GetNodesAndRelations(page, ref listanodes, ref relaciones);
+                    foreach (Visio.Shape relation in relations) {
+                        PhysicalComponent shapePC;
+                        PhysicalComponent physicalComponentFrom = null;
+                        PhysicalComponent physicalComponentTo = null;
+
+                        string aux = string.Empty; 
+
+                        shapePC = new PhysicalComponent(relation.Name, relation.Text, relation.ID.ToString(), physicalModel);
+                        Visio.Shape transitionFrom = relation.Connects.Item16[1].ToSheet;
+                        Visio.Shape transitionTo = relation.Connects.Item16[2].ToSheet;
+
+                        if (transitionFrom != null && transitionTo != null) {
+                            bool existsFrom = allComponents.TryGetValue(transitionFrom.ID, out physicalComponentFrom);
+                            bool existsTo = allComponents.TryGetValue(transitionTo.ID, out physicalComponentTo);
+
+
+                            if (existsFrom && existsTo) {
+                                 physicalModel.ADD_Relationship(relation.Name, physicalComponentFrom, true, physicalComponentTo, true, nameof(Cake.Engine.Enums.Grammaticals.Association), (int)Cake.Engine.Enums.Grammaticals.Association, true, ref aux);
+                            }
+                        }
+
+                    }
+
+                    //GetNodesAndRelations(page, ref listanodes, ref relaciones);
+                    pagesModels.Add(physicalModel);
                     break;
                 }
+                
+                
 
 
 
 
                 // Aqui escribe /*
-             /* Visio.Page newpage = visioDoc.Pages.Add();
+              /*  Visio.Page newpage = visioDoc.Pages.Add();
                 Visio.Shape sourceShape = CreateState(newpage, "First ");
                 Visio.Shape targetShape = CreateState(newpage, "Second ");
 
@@ -86,7 +109,7 @@ namespace visioprueba
 
 
             }
-            return result;
+            return pagesModels;
         }
 
         #region Lectura
