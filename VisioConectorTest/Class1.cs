@@ -8,6 +8,7 @@ using System.Xml.XPath;
 using Visio = Microsoft.Office.Interop.Visio;
 using SRL.Mappings.Enginering;
 using SRL.Mappings.Enginering.PhysicalLevel;
+using SRL.ResourceShape;
 using Cake.Engine;
 namespace visioprueba
 {
@@ -85,6 +86,7 @@ namespace visioprueba
 
                             if (existsFrom && existsTo) {
                                  physicalModel.ADD_Relationship(relation.Name, physicalComponentFrom, true, physicalComponentTo, true, nameof(Cake.Engine.Enums.Grammaticals.Association), (int)Cake.Engine.Enums.Grammaticals.Association, true, ref aux);
+                                /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
                             }
                         }
 
@@ -98,19 +100,40 @@ namespace visioprueba
                 
 
 
-
-
-                // Aqui escribe /*
-              /*  Visio.Page newpage = visioDoc.Pages.Add();
-                Visio.Shape sourceShape = CreateState(newpage, "First ");
-                Visio.Shape targetShape = CreateState(newpage, "Second ");
-
-                Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape); */
-
-
-            }
-            return pagesModels;
+             }
+             return pagesModels;
         }
+
+        public static void ParseToVisio(string fipath, List<PhysicalModel> pagesModels)
+        {
+            if (System.IO.File.Exists(fipath))
+            {
+                // Abrimos doucmento
+                Visio.Document visioDoc = new Visio.Application().Documents.Open(fipath);
+                Dictionary<string, Relationship> allRelationships;
+                foreach (PhysicalModel page in pagesModels)
+                {
+                    Visio.Page newpage = visioDoc.Pages.Add();
+                    allRelationships = page.GET_AllConnectionBetweenPhysicalComponentsAsSRL();
+                    /* Otra opcion puede ser   public Dictionary<string, MappeableElement> GET_MyContainers_MEs(MappeableElement root_ME); */
+                    /* Por cada relación iteramos y parseamos */
+                    foreach (var item in allRelationships)
+                    {
+                        Relationship rel = item.Value;
+                        string relationID = item.Key;
+                        SRL.ResourceShape.Artifact artifactTo = rel.To;
+                        SRL.ResourceShape.Artifact artifactFrom = rel.From;
+                        Visio.Shape sourceShape = CreateState(newpage, "First "); // cambiar first por physicalComponent.Name or .Text
+                        Visio.Shape targetShape = CreateState(newpage, "Second ");
+                        /* Se escribe en visio*/
+                        Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape); 
+
+                    }
+                }
+            }
+        }
+
+
 
         #region Lectura
         private static void  GetNodesAndRelations(Visio.Page visPage, ref Dictionary<int,Shape> nodes, ref Dictionary<int,Shape> relationship) {
