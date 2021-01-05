@@ -29,6 +29,7 @@ namespace visioprueba
                 foreach (Visio.Page page in visioDoc.Pages)
                 {
                     PhysicalModel physicalModel = new PhysicalModel(page.Name, page.NameU, page.ID.ToString());    // añadir codigo identidficador de la pagina                                                                                                                                 
+            
                     GetNodesAndRelations(page,ref physicalModel, ref allComponents, ref relations);
                    
                         foreach (Visio.Shape relation in relations) {
@@ -39,6 +40,7 @@ namespace visioprueba
                         string aux = string.Empty; 
 
                         shapePC = new PhysicalComponent(relation.Name, relation.Text, relation.ID.ToString(), physicalModel);
+                       
                         Visio.Shape transitionFrom = relation.Connects.Item16[1].ToSheet;
                         Visio.Shape transitionTo = relation.Connects.Item16[2].ToSheet;
                         
@@ -46,12 +48,14 @@ namespace visioprueba
                             bool existsFrom = allComponents.TryGetValue(transitionFrom.ID, out physicalComponentFrom);
                             bool existsTo = allComponents.TryGetValue(transitionTo.ID, out physicalComponentTo);
                             if (existsFrom && existsTo) {
-                                 physicalModel.ADD_Relationship(relation.Name, physicalComponentFrom, true, physicalComponentTo, true, nameof(Cake.Engine.Enums.Grammaticals.Association), (int)Cake.Engine.Enums.Grammaticals.Association, true, ref aux);
+                                 physicalModel.ADD_ConnectionBetweenPhysicalComponents(relation.Name, physicalComponentFrom, physicalComponentTo,  ref aux);
                                 /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
                             }
                         }
 
                     }
+                    Dictionary<string, Relationship> allRelationships = physicalModel.GET_AllConnectionBetweenPhysicalComponentsAsSRL();
+                    Console.Write(allRelationships.Keys.ToList().Count);
                     pagesModels.Add(physicalModel);
                     break;
                 }
@@ -68,10 +72,12 @@ namespace visioprueba
                     // si es relacion es OneD=-1
                     /* https://docs.microsoft.com/es-es/office/vba/api/overview/visio/object-model */
                     if (shape.OneD == 0 && shape.Type != (short)Visio.VisShapeTypes.visTypeForeignObject) { // info embebida
-                                                                                                            //se insertan los nodos en la colección
+                        Console.WriteLine(shape.Name + ": " + shape.ID.ToString());                                                                                   //se insertan los nodos en la colección
                         PhysicalComponent shapePC;
                         shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
                         shapePC.ADD_Metadata("lastModificationDate", typeof(string), DateTime.Now); // Le podemos añadir propiedades
+                        
+                        // shapePC.ADD_Metadata("type", typeof(string),); // Le podemos añadir propiedades
                         // Transformaciones de interoperabilidad, herramienta que genera la indezacion, INT de interoperabilidad
                         shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
                         shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
@@ -95,22 +101,45 @@ namespace visioprueba
                 // Abrimos doucmento
                 Visio.Document visioDoc = new Visio.Application().Documents.Open(fipath);
                 Dictionary<string, Relationship> allRelationships;
+                Dictionary<Int32, Shape> shapesProcessed = new Dictionary<int, Shape>();
                 foreach (PhysicalModel page in pagesModels)
                 {
                     Visio.Page newpage = visioDoc.Pages.Add();
                     allRelationships = page.GET_AllConnectionBetweenPhysicalComponentsAsSRL();
+                    Console.Write(allRelationships.Keys.ToList().Count);
                     /* Otra opcion puede ser   public Dictionary<string, MappeableElement> GET_MyContainers_MEs(MappeableElement root_ME); */
                     /* Por cada relación iteramos y parseamos */
                     foreach (var item in allRelationships)
                     {
+                        Console.WriteLine("HOLA");
                         Relationship rel = item.Value;
                         string relationID = item.Key;
                         Console.WriteLine(item.Key);
                         SRL.ResourceShape.Artifact artifactTo = rel.To;
                         SRL.ResourceShape.Artifact artifactFrom = rel.From;
-                        Visio.Shape sourceShape = CreateState(newpage,  artifactTo.Name); // cambiar first por physicalComponent.Name or .Text
-                        Visio.Shape targetShape = CreateState(newpage, artifactFrom.Name);
-                        Console.WriteLine(artifactTo.Name);
+                        Console.WriteLine("+++++"+artifactTo.Name + ": " + artifactTo.Identifier);
+                        Visio.Shape sourceShape, targetShape;
+                        bool keyExists = shapesProcessed.ContainsKey(Int32.Parse(artifactTo.Identifier));
+                        if (keyExists)
+                        {
+                            sourceShape = shapesProcessed[Int32.Parse(artifactTo.Identifier)];
+                        }
+                        else
+                        {
+                            sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description);
+                            shapesProcessed.Add(Int32.Parse(artifactTo.Identifier), sourceShape);
+                        }
+                         keyExists = shapesProcessed.ContainsKey(Int32.Parse(artifactFrom.Identifier));
+                        if (keyExists)
+                        {
+                            targetShape = shapesProcessed[Int32.Parse(artifactFrom.Identifier)];
+                        }
+                        else
+                        {
+                            targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description);
+                            shapesProcessed.Add(Int32.Parse(artifactFrom.Identifier), targetShape);
+                        }
+                       
                         /* Se escribe en visio*/
                         Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape);
 
@@ -119,14 +148,28 @@ namespace visioprueba
             }
         }
 
-        private static Visio.Shape CreateState(Visio.Page page, string name)
+        private static Visio.Shape CreateState(Visio.Page page, string type, string text)
         {
             Visio.Shape result = null;
             if (page != null) {
                 // se crea el objeto, accediendo al namespace Masters donde están los tipos de los objetos en las paletas de Visio
-                result = page.Drop(page.Application.ActiveDocument.Masters.ItemU["State"], 0, 0);
+                string typeFormatted = "";
+                if (type == "Estado inicial") {
+                    typeFormatted = "Initial state";
+                }
+                else if (type == "Estado final"){
+                    typeFormatted = "Final state";
+                }
+                else if (type == "Estado") {
+                    typeFormatted = "State";
+                }
+                else {
+                    typeFormatted = type;
+                }
+                result = page.Drop(page.Application.ActiveDocument.Masters.ItemU[typeFormatted], 0, 0);
             }
-            result.Text = name;
+            result.Text = text;
+          
             return result;
         }
         private static Visio.Shape CreateTransition(Visio.Page page, Visio.Shape sourceShape, Visio.Shape targetShape)
