@@ -33,13 +33,13 @@ namespace visioprueba
                     GetNodesAndRelations(page,ref physicalModel, ref allComponents, ref relations);
                    
                         foreach (Visio.Shape relation in relations) {
-                        PhysicalComponent shapePC;
+                        // PhysicalComponent shapePC;
                         PhysicalComponent physicalComponentFrom = null;
                         PhysicalComponent physicalComponentTo = null;
 
                         string aux = string.Empty; 
 
-                        shapePC = new PhysicalComponent(relation.Name, relation.Text, relation.ID.ToString(), physicalModel);
+                       // shapePC = new PhysicalComponent(relation.Name, relation.Text, relation.ID.ToString(), physicalModel);
                        
                         Visio.Shape transitionFrom = relation.Connects.Item16[1].ToSheet;
                         Visio.Shape transitionTo = relation.Connects.Item16[2].ToSheet;
@@ -48,14 +48,14 @@ namespace visioprueba
                             bool existsFrom = allComponents.TryGetValue(transitionFrom.ID, out physicalComponentFrom);
                             bool existsTo = allComponents.TryGetValue(transitionTo.ID, out physicalComponentTo);
                             if (existsFrom && existsTo) {
-                                 physicalModel.ADD_ConnectionBetweenPhysicalComponents(relation.Name, physicalComponentFrom, physicalComponentTo,  ref aux);
+                                
+                                 physicalModel.ADD_ConnectionBetweenPhysicalComponents(relation.Text, physicalComponentFrom, physicalComponentTo, ref aux);
+                                
                                 /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
                             }
                         }
-
                     }
                     Dictionary<string, Relationship> allRelationships = physicalModel.GET_AllConnectionBetweenPhysicalComponentsAsSRL();
-                    Console.Write(allRelationships.Keys.ToList().Count);
                     pagesModels.Add(physicalModel);
                     break;
                 }
@@ -72,12 +72,15 @@ namespace visioprueba
                     // si es relacion es OneD=-1
                     /* https://docs.microsoft.com/es-es/office/vba/api/overview/visio/object-model */
                     if (shape.OneD == 0 && shape.Type != (short)Visio.VisShapeTypes.visTypeForeignObject) { // info embebida
-                        Console.WriteLine(shape.Name + ": " + shape.ID.ToString());                                                                                   //se insertan los nodos en la colección
+                        //se insertan los nodos en la colección
                         PhysicalComponent shapePC;
                         shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
-                        shapePC.ADD_Metadata("lastModificationDate", typeof(string), DateTime.Now); // Le podemos añadir propiedades
-                        
-                        // shapePC.ADD_Metadata("type", typeof(string),); // Le podemos añadir propiedades
+
+                        if (shape.Name == "State" || shape.Name == "Estado") { // Si es state guardamos el título
+                            Visio.Shape titleShape = visPage.Shapes.ItemFromID[shape.ID + 1];
+                            shapePC.ADD_Metadata("SimpleStateTitle", typeof(string), titleShape.Text);
+                           
+                        }
                         // Transformaciones de interoperabilidad, herramienta que genera la indezacion, INT de interoperabilidad
                         shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
                         shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
@@ -87,7 +90,7 @@ namespace visioprueba
                     } else if(shape.OneD == -1 || shape.Connects.Count > 0) {
                         relationship.Add(shape);
                     }
-                 }
+                }
             }
         }
         #endregion Lectura
@@ -106,18 +109,16 @@ namespace visioprueba
                 {
                     Visio.Page newpage = visioDoc.Pages.Add();
                     allRelationships = page.GET_AllConnectionBetweenPhysicalComponentsAsSRL();
-                    Console.Write(allRelationships.Keys.ToList().Count);
+
                     /* Otra opcion puede ser   public Dictionary<string, MappeableElement> GET_MyContainers_MEs(MappeableElement root_ME); */
                     /* Por cada relación iteramos y parseamos */
-                    foreach (var item in allRelationships)
-                    {
-                        Console.WriteLine("HOLA");
+                    Int32 counter = 0;
+                    foreach (var item in allRelationships)   {
                         Relationship rel = item.Value;
                         string relationID = item.Key;
-                        Console.WriteLine(item.Key);
+                       
                         SRL.ResourceShape.Artifact artifactTo = rel.To;
                         SRL.ResourceShape.Artifact artifactFrom = rel.From;
-                        Console.WriteLine("+++++"+artifactTo.Name + ": " + artifactTo.Identifier);
                         Visio.Shape sourceShape, targetShape;
                         bool keyExists = shapesProcessed.ContainsKey(Int32.Parse(artifactTo.Identifier));
                         if (keyExists)
@@ -126,7 +127,14 @@ namespace visioprueba
                         }
                         else
                         {
-                            sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description);
+                            if (artifactTo.Name == "State" || artifactTo.Name == "Estado") {
+                                sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, "", counter);
+
+                            } else
+                            {
+                                sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, null, counter);
+                            }
+                            counter++;
                             shapesProcessed.Add(Int32.Parse(artifactTo.Identifier), sourceShape);
                         }
                          keyExists = shapesProcessed.ContainsKey(Int32.Parse(artifactFrom.Identifier));
@@ -136,43 +144,69 @@ namespace visioprueba
                         }
                         else
                         {
-                            targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description);
-                            shapesProcessed.Add(Int32.Parse(artifactFrom.Identifier), targetShape);
+                            if (artifactFrom.Name == "State" || artifactFrom.Name == "Estado")
+                            {
+                               // MetaData existKey = artifactFrom.GetMetaDataByKey("SimpleStateTitle");
+                                targetShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, "", counter);
+                                
+
+                            }
+                            else
+                            {
+                                targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description, null, counter) ;
+                                shapesProcessed.Add(Int32.Parse(artifactFrom.Identifier), targetShape);
+                            }
+                            counter++;
                         }
-                       
                         /* Se escribe en visio*/
-                        Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape);
+                        Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape, rel.Name);
+                        newpage.Layout();
+                      
 
                     }
                 }
             }
         }
 
-        private static Visio.Shape CreateState(Visio.Page page, string type, string text)
+        private static Visio.Shape CreateState(Visio.Page page, string type, string text, string title, float position)
         {
             Visio.Shape result = null;
             if (page != null) {
                 // se crea el objeto, accediendo al namespace Masters donde están los tipos de los objetos en las paletas de Visio
                 string typeFormatted = "";
-                if (type == "Estado inicial") {
+                if (type == "Estado inicial")
+                {
                     typeFormatted = "Initial state";
                 }
-                else if (type == "Estado final"){
+                else if (type == "Estado final")
+                {
                     typeFormatted = "Final state";
                 }
-                else if (type == "Estado") {
+                else if (type == "Estado")
+                {
                     typeFormatted = "State";
                 }
-                else {
+                else if (type == "State" || type == "Final state" || type == "Initial state")
+                {
                     typeFormatted = type;
                 }
-                result = page.Drop(page.Application.ActiveDocument.Masters.ItemU[typeFormatted], 0, 0);
+                else {
+                    typeFormatted = "State";
+                }
+
+                result = page.Drop(page.Application.ActiveDocument.Masters.ItemU[typeFormatted], position, position);
+                result.Text = text;
+                if (title != null) { 
+                    Visio.Shape titleShape = page.Shapes.ItemFromID[result.ID + 1];
+                    titleShape.Text = title;
+                }
+
             }
-            result.Text = text;
+           
           
             return result;
         }
-        private static Visio.Shape CreateTransition(Visio.Page page, Visio.Shape sourceShape, Visio.Shape targetShape)
+        private static Visio.Shape CreateTransition(Visio.Page page, Visio.Shape sourceShape, Visio.Shape targetShape, string text)
         {
             Visio.Shape transition = null;
             if (page != null && sourceShape != null && targetShape != null)
@@ -183,7 +217,10 @@ namespace visioprueba
                 transition.get_CellsU("BeginX").GlueTo(sourceShape.get_CellsU("PinX"));
                 // se asigna el target
                 transition.get_CellsU("EndX").GlueTo(targetShape.get_CellsU("PinX"));
-
+                transition.CellsSRC[0, 0, 0].FormulaU =("13"); // intento de la flechita
+               
+                    transition.Text = text;
+            
 
             }
             return transition;
