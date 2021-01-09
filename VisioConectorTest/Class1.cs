@@ -50,7 +50,8 @@ namespace visioprueba
                             if (existsFrom && existsTo) {
                                 
                                  physicalModel.ADD_ConnectionBetweenPhysicalComponents(relation.Text, physicalComponentFrom, physicalComponentTo, ref aux);
-                    
+                                
+                                /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
                             }
                         }
                     }
@@ -99,10 +100,19 @@ namespace visioprueba
 
         public static void ParseToVisio(string fipath, List<PhysicalModel> pagesModels)
         {
-            if (System.IO.File.Exists(fipath))
+            Visio.Document visioDoc;
+            if (!System.IO.File.Exists(fipath)) {
+                string path = System.IO.Directory.GetCurrentDirectory();
+                string split = @"visioConector\bin\Debug";
+                string result = path.Replace(@"visioConector\bin\Debug", "default.vsdx");
+                visioDoc = new Visio.Application().Documents.Add(result);
+
+            }
+            else
             {
                 // Abrimos doucmento
-                Visio.Document visioDoc = new Visio.Application().Documents.Open(fipath);
+                visioDoc = new Visio.Application().Documents.Open(fipath);
+            }
                 Dictionary<string, Relationship> allRelationships;
                 Dictionary<Int32, Shape> shapesProcessed = new Dictionary<int, Shape>();
                 foreach (PhysicalModel page in pagesModels)
@@ -165,8 +175,10 @@ namespace visioprueba
                       
 
                     }
-                }
+                    visioDoc.Application.ActiveDocument.SaveAs(fipath);
             }
+
+            
         }
 
         private static Visio.Shape CreateState(Visio.Page page, string type, string text, string title, float position)
