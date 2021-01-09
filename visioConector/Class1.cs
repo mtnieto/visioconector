@@ -11,7 +11,7 @@ namespace visioConector
 {
     public class Class1
     {
-        private const string Fipath = @"C:\Users\User\Desktop\visioconector\semaforo.vsdx";
+        private const string Fipath = @"C:\Users\User\Desktop\visioconector\maquinaEstados.vsdx";
         private const string Fipath2 = @"C:\Users\User\Desktop\visioconector\maquinaEstados222.vsdx";
 
 

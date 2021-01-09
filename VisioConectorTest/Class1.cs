@@ -231,12 +231,12 @@ namespace visioprueba
                 transition.get_CellsU("BeginX").GlueTo(targetShape.get_CellsU("PinX"));
                 // se asigna el target
                 transition.get_CellsU("EndX").GlueTo(sourceShape.get_CellsU("PinX"));
-                transition.CellsSRC[0, 0, 0].FormulaU =("13"); // intento de la flechita
+                transition.CellsSRC[0, 0, 0].FormulaU =("13"); // intento de la flechita 
                 // sourceShape.AutoConnect(targetShape, Visio.VisAutoConnectDir.visAutoConnectDirRight);
                 //Assuming 'No theme' is set for the page, no arrow will 
                 //be shown so change theme to see connector arrow
                 
-                transition.Text = text;
+                //transition.Text = text;
             
 
             }
