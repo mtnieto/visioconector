@@ -19,7 +19,7 @@ namespace visioprueba
         {
 
             List<PhysicalModel> pagesModels = new List<PhysicalModel>();
-            Dictionary<int, PhysicalComponent> allComponents = new Dictionary<int, PhysicalComponent>();
+            Dictionary<string, PhysicalComponent> allComponents = new Dictionary<string, PhysicalComponent>();
             List<Shape> relations = new List<Shape>();
             // Creamos y abrimos documento de visio
             if (System.IO.File.Exists(fipath))
@@ -45,26 +45,25 @@ namespace visioprueba
                         Visio.Shape transitionTo = relation.Connects.Item16[2].ToSheet;
                         
                         if (transitionFrom != null && transitionTo != null) {
-                            bool existsFrom = allComponents.TryGetValue(transitionFrom.ID, out physicalComponentFrom);
-                            bool existsTo = allComponents.TryGetValue(transitionTo.ID, out physicalComponentTo);
+                            bool existsFrom = allComponents.TryGetValue(page.ID + ":" + transitionFrom.ID, out physicalComponentFrom);
+                            bool existsTo = allComponents.TryGetValue(page.ID + ":" + transitionTo.ID, out physicalComponentTo);
                             if (existsFrom && existsTo) {
                                 
                                  physicalModel.ADD_ConnectionBetweenPhysicalComponents(relation.Text, physicalComponentFrom, physicalComponentTo, ref aux);
-                                
-                                /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
+                    
                             }
                         }
                     }
                     Dictionary<string, Relationship> allRelationships = physicalModel.GET_AllConnectionBetweenPhysicalComponentsAsSRL();
                     pagesModels.Add(physicalModel);
-                    break;
+                    
                 }
              }
              return pagesModels;
         }
 
         #region Lectura
-        private static void  GetNodesAndRelations(Visio.Page visPage, ref PhysicalModel physicalModel, ref Dictionary<int,PhysicalComponent> nodes, ref List<Shape> relationship) {
+        private static void  GetNodesAndRelations(Visio.Page visPage, ref PhysicalModel physicalModel, ref Dictionary<string,PhysicalComponent> nodes, ref List<Shape> relationship) {
 
             if (visPage != null && visPage.Shapes.Count > 0) {
                 foreach (Visio.Shape shape in visPage.Shapes) {
@@ -85,7 +84,8 @@ namespace visioprueba
                         shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
                         shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
                         // shape.TYPE_LibararyPath_InSource = "" // por si queremos usar una librería ya existente
-                        nodes.Add(shape.ID, shapePC);
+           
+                        nodes.Add(visPage.ID + ":" + shape.ID, shapePC);
 
                     } else if(shape.OneD == -1 || shape.Connects.Count > 0) {
                         relationship.Add(shape);
@@ -147,7 +147,7 @@ namespace visioprueba
                             if (artifactFrom.Name == "State" || artifactFrom.Name == "Estado")
                             {
                                // MetaData existKey = artifactFrom.GetMetaDataByKey("SimpleStateTitle");
-                                targetShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, "", counter);
+                                targetShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, "holi", counter);
                                 
 
                             }
@@ -160,6 +160,7 @@ namespace visioprueba
                         }
                         /* Se escribe en visio*/
                         Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape, rel.Name);
+                        newpage.SetTheme("Office Theme");
                         newpage.Layout();
                       
 
@@ -182,11 +183,12 @@ namespace visioprueba
                 {
                     typeFormatted = "Final state";
                 }
-                else if (type == "Estado")
-                {
+                else if (type == "Estado" || type == "State")
+                {   
                     typeFormatted = "State";
+                    
                 }
-                else if (type == "State" || type == "Final state" || type == "Initial state")
+                else if ( type == "Final state" || type == "Initial state")
                 {
                     typeFormatted = type;
                 }
@@ -214,12 +216,15 @@ namespace visioprueba
                 // se crea el shape de relacion para luego asignar source y target
                 transition = page.Drop(page.Application.ConnectorToolDataObject, 0, 0);
                 // se asigna source
-                transition.get_CellsU("BeginX").GlueTo(sourceShape.get_CellsU("PinX"));
+                transition.get_CellsU("BeginX").GlueTo(targetShape.get_CellsU("PinX"));
                 // se asigna el target
-                transition.get_CellsU("EndX").GlueTo(targetShape.get_CellsU("PinX"));
+                transition.get_CellsU("EndX").GlueTo(sourceShape.get_CellsU("PinX"));
                 transition.CellsSRC[0, 0, 0].FormulaU =("13"); // intento de la flechita
-               
-                    transition.Text = text;
+                // sourceShape.AutoConnect(targetShape, Visio.VisAutoConnectDir.visAutoConnectDirRight);
+                //Assuming 'No theme' is set for the page, no arrow will 
+                //be shown so change theme to see connector arrow
+                
+                transition.Text = text;
             
 
             }
