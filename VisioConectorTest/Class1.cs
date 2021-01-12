@@ -48,7 +48,6 @@ namespace visioprueba
                             bool existsFrom = allComponents.TryGetValue(page.ID + ":" + transitionFrom.ID, out physicalComponentFrom);
                             bool existsTo = allComponents.TryGetValue(page.ID + ":" + transitionTo.ID, out physicalComponentTo);
                             if (existsFrom && existsTo) {
-                                
                                  physicalModel.ADD_ConnectionBetweenPhysicalComponents(relation.Text, physicalComponentFrom, physicalComponentTo, ref aux);
                                 
                                 /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
@@ -84,8 +83,8 @@ namespace visioprueba
                         // Transformaciones de interoperabilidad, herramienta que genera la indezacion, INT de interoperabilidad
                         shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
                         shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
-                        // shape.TYPE_LibararyPath_InSource = "" // por si queremos usar una librería ya existente
-           
+                                                             // shape.TYPE_LibararyPath_InSource = "" // por si queremos usar una librería ya existente
+                       
                         nodes.Add(visPage.ID + ":" + shape.ID, shapePC);
 
                     } else if(shape.OneD == -1 || shape.Connects.Count > 0) {
@@ -103,7 +102,6 @@ namespace visioprueba
             Visio.Document visioDoc;
             if (!System.IO.File.Exists(fipath)) {
                 string path = System.IO.Directory.GetCurrentDirectory();
-                string split = @"visioConector\bin\Debug";
                 string result = path.Replace(@"visioConector\bin\Debug", "default.vsdx");
                 visioDoc = new Visio.Application().Documents.Add(result);
 
@@ -122,23 +120,23 @@ namespace visioprueba
 
                     /* Otra opcion puede ser   public Dictionary<string, MappeableElement> GET_MyContainers_MEs(MappeableElement root_ME); */
                     /* Por cada relación iteramos y parseamos */
-                    Int32 counter = 0;
+                    Int32 counter = 0; // PARA LA POSICION
                     foreach (var item in allRelationships)   {
                         Relationship rel = item.Value;
-                        string relationID = item.Key;
-                       
+                                               
                         SRL.ResourceShape.Artifact artifactTo = rel.To;
                         SRL.ResourceShape.Artifact artifactFrom = rel.From;
                         Visio.Shape sourceShape, targetShape;
+
+                        // procesamos la relación cpgemos shapeTo
                         bool keyExists = shapesProcessed.ContainsKey(Int32.Parse(artifactTo.Identifier));
-                        if (keyExists)
+                        if (keyExists) // Si ya se ha procesado la shape
                         {
                             sourceShape = shapesProcessed[Int32.Parse(artifactTo.Identifier)];
-                        }
-                        else
+                        } else // Si aún no la hemos procesado
                         {
                             if (artifactTo.Name == "State" || artifactTo.Name == "Estado") {
-                                sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, "", counter);
+                                sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, null, counter);
 
                             } else
                             {
@@ -147,6 +145,9 @@ namespace visioprueba
                             counter++;
                             shapesProcessed.Add(Int32.Parse(artifactTo.Identifier), sourceShape);
                         }
+
+
+
                          keyExists = shapesProcessed.ContainsKey(Int32.Parse(artifactFrom.Identifier));
                         if (keyExists)
                         {
@@ -157,18 +158,18 @@ namespace visioprueba
                             if (artifactFrom.Name == "State" || artifactFrom.Name == "Estado")
                             {
                                // MetaData existKey = artifactFrom.GetMetaDataByKey("SimpleStateTitle");
-                                targetShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, "holi", counter);
-                                
+                                targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description, "", counter);
 
                             }
                             else
                             {
                                 targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description, null, counter) ;
-                                shapesProcessed.Add(Int32.Parse(artifactFrom.Identifier), targetShape);
+                               
                             }
-                            counter++;
+                        shapesProcessed.Add(Int32.Parse(artifactFrom.Identifier), targetShape);
+                        counter++;
                         }
-                        /* Se escribe en visio*/
+                    /* Se escribe en visio*/
                         Visio.Shape transition1 = CreateTransition(newpage, sourceShape, targetShape, rel.Name);
                         newpage.SetTheme("Office Theme");
                         newpage.Layout();
@@ -236,7 +237,7 @@ namespace visioprueba
                 //Assuming 'No theme' is set for the page, no arrow will 
                 //be shown so change theme to see connector arrow
                 
-                //transition.Text = text;
+                transition.Text = text;
             
 
             }
@@ -244,87 +245,6 @@ namespace visioprueba
         }
 
         #endregion Escritura
-
-        public static List<PhysicalModel> GetVisioShapesFromFileOld(string fipath)
-        {
-
-            List<PhysicalModel> pagesModels = new List<PhysicalModel>();
-            Dictionary<int, PhysicalComponent> allComponents = new Dictionary<int, PhysicalComponent>();
-            List<Shape> relations = new List<Shape>();
-            // Creamos y abrimos documento de visio
-            if (System.IO.File.Exists(fipath))
-            {
-                Visio.Document visioDoc = new Visio.Application().Documents.Open(fipath);
-
-
-                foreach (Visio.Page page in visioDoc.Pages)
-
-                {
-                    PhysicalModel physicalModel = new PhysicalModel(page.Name, page.NameU, page.ID.ToString());    // añadir codigo identidficador de la pagina
-                    // se recorren los objetos
-                    foreach (Visio.Shape shape in page.Shapes)
-                    {
-
-
-                        if (string.IsNullOrWhiteSpace(shape.Text) == false) // Si tiene contenido
-                        {
-                            PhysicalComponent shapePC;
-                            shapePC = new PhysicalComponent(shape.Name, shape.Text, shape.ID.ToString(), physicalModel);
-                            shapePC.ADD_Metadata("lastModificationDate", typeof(string), DateTime.Now); // Le podemos añadir propiedades
-                            /* result.Add(shape.Text);
-                             Console.Write(result);*/
-                            // Transformaciones de interoperabilidad, herramienta que genera la indezacion, INT de interoperabilidad
-                            shapePC.TYPE_SourceTool = Cake.Engine.Enums.Grammaticals.INT_Visio;
-                            shapePC.TYPE_InSource = shape.NameU; // NameU es la tipologia que le pone a visio en sus componentes
-                                                                 // shape.TYPE_LibararyPath_InSource = "" // por si queremos usar una librería ya existente
-                            allComponents.Add(shape.ID, shapePC);
-                        }
-                        else
-                        { // si es una relación
-                            if (shape.Connects.Count > 0)
-                            {
-
-                                relations.Add(shape);
-                            }
-
-                        }
-                    }
-                    foreach (Visio.Shape relation in relations)
-                    {
-                        PhysicalComponent shapePC;
-                        PhysicalComponent physicalComponentFrom = null;
-                        PhysicalComponent physicalComponentTo = null;
-
-                        string aux = string.Empty;
-
-                        shapePC = new PhysicalComponent(relation.Name, relation.Text, relation.ID.ToString(), physicalModel);
-                        Visio.Shape transitionFrom = relation.Connects.Item16[1].ToSheet;
-                        Visio.Shape transitionTo = relation.Connects.Item16[2].ToSheet;
-
-                        if (transitionFrom != null && transitionTo != null)
-                        {
-                            bool existsFrom = allComponents.TryGetValue(transitionFrom.ID, out physicalComponentFrom);
-                            bool existsTo = allComponents.TryGetValue(transitionTo.ID, out physicalComponentTo);
-
-
-                            if (existsFrom && existsTo)
-                            {
-                                physicalModel.ADD_Relationship(relation.Name, physicalComponentFrom, true, physicalComponentTo, true, nameof(Cake.Engine.Enums.Grammaticals.Association), (int)Cake.Engine.Enums.Grammaticals.Association, true, ref aux);
-                                /* por qué usar este y no ADD_ConnectionBetweenPhysicalComponents */
-                            }
-                        }
-
-                    }
-                    //GetNodesAndRelations(page, ref listanodes, ref relaciones);
-                    pagesModels.Add(physicalModel);
-                    break;
-                }
-
-
-            }
-            return pagesModels;
-        }
-
 
     }
 }
