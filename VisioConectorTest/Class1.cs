@@ -136,7 +136,9 @@ namespace visioprueba
                         } else // Si aún no la hemos procesado
                         {
                             if (artifactTo.Name == "State" || artifactTo.Name == "Estado") {
-                                sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, null, counter);
+                           // string text = artifactTo.GetMetaDataByKey("SimpleStateTitle").ToString(); // No funciona
+                            
+                            sourceShape = CreateState(newpage, artifactTo.Name, artifactTo.Description, null, counter);
 
                             } else
                             {
@@ -157,8 +159,8 @@ namespace visioprueba
                         {
                             if (artifactFrom.Name == "State" || artifactFrom.Name == "Estado")
                             {
-                               // MetaData existKey = artifactFrom.GetMetaDataByKey("SimpleStateTitle");
-                                targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description, "", counter);
+                            // string text = artifactFrom.GetMetaDataByKey("SimpleStateTitle").ToString(); // no funciona
+                            targetShape = CreateState(newpage, artifactFrom.Name, artifactFrom.Description, null, counter);
 
                             }
                             else
